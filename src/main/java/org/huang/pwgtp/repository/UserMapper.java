@@ -2,7 +2,6 @@ package org.huang.pwgtp.repository;
 
 import org.apache.ibatis.annotations.Mapper;
 import org.huang.pwgtp.repository.model.UserDO;
-import org.huang.pwgtp.vo.UserVO;
 
 import java.util.List;
 

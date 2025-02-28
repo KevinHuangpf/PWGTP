@@ -5,13 +5,11 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import org.huang.pwgtp.common.CommonPage;
 import org.huang.pwgtp.common.CommonResult;
 import org.huang.pwgtp.convertor.TravelActivityConvertor;
-import org.huang.pwgtp.repository.TravelActivityMapper;
 import org.huang.pwgtp.service.TravelActivityService;
 import org.huang.pwgtp.service.model.TravelActivityDTO;
-import org.huang.pwgtp.vo.TravelActivityDetailVO;
-import org.huang.pwgtp.vo.TravelActivitySaveVO;
+import org.huang.pwgtp.controller.vo.TravelActivityDetailVO;
+import org.huang.pwgtp.controller.vo.TravelActivitySaveVO;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.*;
 
 @RestController

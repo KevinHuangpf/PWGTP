@@ -14,7 +14,7 @@ public class TravelActivityDO {
     /**
      * id
      */
-    private Integer id;
+    private Long id;
 
     /**
      * 创建时间
@@ -29,12 +29,12 @@ public class TravelActivityDO {
     /**
      * 创建人
      */
-    private Integer creatorUid;
+    private Long creatorUid;
 
     /**
      * 修改人
      */
-    private Integer modifierUid;
+    private Long modifierUid;
 
     /**
      * 行程名称
@@ -44,16 +44,18 @@ public class TravelActivityDO {
     /**
      * 行程描述
      */
-    private String describe;
+    private String description;
 
     /**
      * 计划招募成员人数
      */
     private Integer planRecruitMemberNumber;
 
+
     /**
      * 已经招募成员
      * List<Long> jsonString
      */
     private String hasRecruitedMemberList;
+
 }

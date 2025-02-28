@@ -6,7 +6,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.servlet.http.HttpServletRequest;
 import org.huang.pwgtp.common.CommonResult;
 import org.huang.pwgtp.service.UserService;
-import org.huang.pwgtp.vo.UserVO;
+import org.huang.pwgtp.controller.vo.UserVO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 

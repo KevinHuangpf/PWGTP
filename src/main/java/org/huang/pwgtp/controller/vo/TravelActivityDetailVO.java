@@ -1,4 +1,4 @@
-package org.huang.pwgtp.vo;
+package org.huang.pwgtp.controller.vo;
 
 
 import lombok.Data;
@@ -12,7 +12,7 @@ public class TravelActivityDetailVO {
     /**
      * id
      */
-    private Integer id;
+    private Long id;
 
     /**
      * 创建时间
@@ -49,6 +49,11 @@ public class TravelActivityDetailVO {
      * 已经招募成员
      */
     private List<UserVO> hasRecruitedMemberList;
+
+    /**
+     * 已经招募成员数量
+     */
+    private Integer hasRecruitedMemberNumber;
 
 
 }

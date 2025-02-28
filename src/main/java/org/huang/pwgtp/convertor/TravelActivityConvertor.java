@@ -3,13 +3,11 @@ package org.huang.pwgtp.convertor;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.TypeReference;
 import org.huang.pwgtp.repository.model.TravelActivityDO;
-import org.huang.pwgtp.service.TravelActivityService;
 import org.huang.pwgtp.service.UserService;
 import org.huang.pwgtp.service.model.TravelActivityDTO;
-import org.huang.pwgtp.service.model.UserDTO;
-import org.huang.pwgtp.vo.TravelActivityDetailVO;
-import org.huang.pwgtp.vo.TravelActivitySaveVO;
-import org.huang.pwgtp.vo.UserVO;
+import org.huang.pwgtp.controller.vo.TravelActivityDetailVO;
+import org.huang.pwgtp.controller.vo.TravelActivitySaveVO;
+import org.huang.pwgtp.controller.vo.UserVO;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -58,6 +56,7 @@ public class TravelActivityConvertor {
 
         List<UserVO> userVOS = userConvertor.convertDOToVOList(userService.listUserById(travelActivityDTO.getHasRecruitedMemberList()));
         travelActivityDetailVO.setHasRecruitedMemberList(userVOS);
+        travelActivityDetailVO.setHasRecruitedMemberNumber(CollectionUtils.isEmpty(travelActivityDTO.getHasRecruitedMemberList())? 1: travelActivityDTO.getHasRecruitedMemberList().size()+1);
 
         return travelActivityDetailVO;
     }

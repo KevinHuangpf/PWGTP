@@ -2,7 +2,7 @@ package org.huang.pwgtp.convertor;
 
 import org.huang.pwgtp.repository.model.UserDO;
 import org.huang.pwgtp.service.model.UserDTO;
-import org.huang.pwgtp.vo.UserVO;
+import org.huang.pwgtp.controller.vo.UserVO;
 import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Component;
 

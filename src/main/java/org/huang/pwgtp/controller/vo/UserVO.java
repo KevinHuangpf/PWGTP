@@ -1,4 +1,4 @@
-package org.huang.pwgtp.vo;
+package org.huang.pwgtp.controller.vo;
 
 import lombok.Data;
 

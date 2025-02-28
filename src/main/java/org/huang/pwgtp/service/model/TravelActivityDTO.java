@@ -1,7 +1,6 @@
 package org.huang.pwgtp.service.model;
 
 import lombok.Data;
-import org.huang.pwgtp.vo.UserVO;
 
 import java.util.Date;
 import java.util.List;
@@ -12,7 +11,7 @@ public class TravelActivityDTO {
     /**
      * id
      */
-    private Integer id;
+    private Long id;
 
     /**
      * 创建时间
@@ -42,7 +41,7 @@ public class TravelActivityDTO {
     /**
      * 行程描述
      */
-    private String describe;
+    private String description;
 
     /**
      * 计划招募成员人数
@@ -53,6 +52,5 @@ public class TravelActivityDTO {
      * 已经招募成员
      */
     private List<Long> hasRecruitedMemberList;
-
 
 }
