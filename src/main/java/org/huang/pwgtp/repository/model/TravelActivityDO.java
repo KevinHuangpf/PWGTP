@@ -1,6 +1,7 @@
 package org.huang.pwgtp.repository.model;
 
 import lombok.Data;
+import org.huang.pwgtp.common.bizEnum.TravelWayEnum;
 
 import java.util.Date;
 import java.util.List;
@@ -46,6 +47,31 @@ public class TravelActivityDO {
      */
     private String description;
 
+
+    /**
+     * 行程类型
+     */
+    private String travelType;
+
+    /**
+     * 出行方式
+     * 可多选
+     * {@link TravelWayEnum}
+     * List<Long> jsonString
+     */
+    private String travelWay;
+
+    /**
+     * 行程开始时间
+     */
+    private Date travelStartTime;
+
+    /**
+     * 行程结束时间
+     */
+    private Date travelEndTime;
+
+
     /**
      * 计划招募成员人数
      */
@@ -57,5 +83,10 @@ public class TravelActivityDO {
      * List<Long> jsonString
      */
     private String hasRecruitedMemberList;
+
+    /**
+     * 行程计划/攻略
+     */
+    private String travelPlan;
 
 }

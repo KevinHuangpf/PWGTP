@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="org.huang.pwgtp.repository.TravelActivityMapper">
+
+    <resultMap id="BaseResultMap" type="org.huang.pwgtp.repository.model.TravelActivityDO">
+        <id column="id" jdbcType="BIGINT" property="id" />
+        <result column="gmt_create" jdbcType="TIMESTAMP" property="gmtCreate" />
+        <result column="gmt_modified" jdbcType="TIMESTAMP" property="gmtModified" />
+        <result column="creator_uid" jdbcType="BIGINT" property="creatorUid" />
+        <result column="modifier_uid" jdbcType="BIGINT" property="modifierUid" />
+
+
+
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        id, <include refid="Base_Column_List_WITHOUT_ID" />
+    </sql>
+
+    <sql id="Base_Column_List_WITHOUT_ID">
+        gmt_create, gmt_modified, creator_uid, modifier_uid
+    </sql>
+
+
+    <select id="selectById" parameterType="java.lang.Long" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List" />
+        from travel_activity
+        where id = #{id,jdbcType=BIGINT}
+    </select>
+
+</mapper>

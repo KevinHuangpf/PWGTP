@@ -44,6 +44,7 @@ public class TravelActivityConvertor {
         TravelActivityDTO travelActivityDTO = new TravelActivityDTO();
         BeanUtils.copyProperties(travelActivityDO, travelActivityDTO);
         travelActivityDTO.setHasRecruitedMemberList(JSON.parseObject(travelActivityDO.getHasRecruitedMemberList(), new TypeReference<List<Long>>(){}));
+        travelActivityDTO.setTravelWay(JSON.parseObject(travelActivityDO.getTravelWay(), new TypeReference<List<String>>(){}));
         return travelActivityDTO;
     }
 
@@ -51,11 +52,12 @@ public class TravelActivityConvertor {
         TravelActivityDetailVO travelActivityDetailVO = new TravelActivityDetailVO();
         BeanUtils.copyProperties(travelActivityDTO, travelActivityDetailVO);
 
-        UserVO creatorUser = userConvertor.convertDTOToVO(userService.getUserById(travelActivityDTO.getCreatorUid()));
-        travelActivityDetailVO.setCreatorUser(creatorUser);
+//        UserVO creatorUser = userConvertor.convertDTOToVO(userService.getUserById(travelActivityDTO.getCreatorUid()));
+//        travelActivityDetailVO.setCreatorUser(creatorUser);
+//
+//        List<UserVO> userVOS = userConvertor.convertDOToVOList(userService.listUserById(travelActivityDTO.getHasRecruitedMemberList()));
+//        travelActivityDetailVO.setHasRecruitedMemberList(userVOS);
 
-        List<UserVO> userVOS = userConvertor.convertDOToVOList(userService.listUserById(travelActivityDTO.getHasRecruitedMemberList()));
-        travelActivityDetailVO.setHasRecruitedMemberList(userVOS);
         travelActivityDetailVO.setHasRecruitedMemberNumber(CollectionUtils.isEmpty(travelActivityDTO.getHasRecruitedMemberList())? 1: travelActivityDTO.getHasRecruitedMemberList().size()+1);
 
         return travelActivityDetailVO;

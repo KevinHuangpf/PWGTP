@@ -28,7 +28,7 @@ public class TravelActivityService {
     }
 
     public TravelActivityDTO getTravelActivityById(Long id){
-        TravelActivityDO travelActivityDO = travelActivityMapper.getTravelActivityById(id);
+        TravelActivityDO travelActivityDO = travelActivityMapper.selectById(id);
         return travelActivityConvertor.convertTravelActivityDOToDTO(travelActivityDO);
     }
 
