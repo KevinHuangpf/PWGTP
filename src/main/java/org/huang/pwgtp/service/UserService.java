@@ -19,7 +19,7 @@ public class UserService {
     private UserConvertor userConvertor;
 
     public UserDTO getUserById(Long id){
-        UserDO userDO = userService.getUserById(id);
+        UserDO userDO = userService.getById(id);
         return userConvertor.convertDOToDTO(userDO);
     }
 

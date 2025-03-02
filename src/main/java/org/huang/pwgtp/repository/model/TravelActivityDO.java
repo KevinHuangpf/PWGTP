@@ -49,6 +49,12 @@ public class TravelActivityDO {
 
 
     /**
+     * 行程状态
+     * {@link org.huang.pwgtp.common.bizEnum.TravelActivityStatusEnum}
+     */
+    private String status;
+
+    /**
      * 行程类型
      */
     private String travelType;
@@ -88,5 +94,11 @@ public class TravelActivityDO {
      * 行程计划/攻略
      */
     private String travelPlan;
+
+    /**
+     * 删除状态
+     * 1=删除，0未删除，默认0
+     */
+    private Integer deleted;
 
 }

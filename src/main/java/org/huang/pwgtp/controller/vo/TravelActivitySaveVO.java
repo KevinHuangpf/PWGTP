@@ -14,11 +14,6 @@ public class TravelActivitySaveVO {
     private Integer id;
 
     /**
-     * 创建人
-     */
-    private Long creatorUid;
-
-    /**
      * 行程名称
      */
     private String name;

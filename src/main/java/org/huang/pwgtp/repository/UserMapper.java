@@ -8,7 +8,12 @@ import java.util.List;
 @Mapper
 public interface UserMapper {
 
-    UserDO getUserById(Long id);
+    int insert(UserDO userDO);
+
+    int updateById(UserDO userDO);
+
+    UserDO getById(Long id);
 
     List<UserDO> listByIds(List<Long> ids);
+
 }

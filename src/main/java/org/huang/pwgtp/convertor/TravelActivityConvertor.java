@@ -8,6 +8,7 @@ import org.huang.pwgtp.service.model.TravelActivityDTO;
 import org.huang.pwgtp.controller.vo.TravelActivityDetailVO;
 import org.huang.pwgtp.controller.vo.TravelActivitySaveVO;
 import org.huang.pwgtp.controller.vo.UserVO;
+import org.huang.pwgtp.service.model.UserDTO;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -28,6 +29,9 @@ public class TravelActivityConvertor {
 
 
     public TravelActivityDO convertTravelActivityDTOToDO(TravelActivityDTO travelActivityDTO){
+        if(travelActivityDTO == null){
+            return null;
+        }
         TravelActivityDO travelActivityDO = new TravelActivityDO();
         BeanUtils.copyProperties(travelActivityDTO, travelActivityDO);
         travelActivityDO.setHasRecruitedMemberList(JSON.toJSONString(travelActivityDTO.getHasRecruitedMemberList()));
@@ -35,12 +39,18 @@ public class TravelActivityConvertor {
     }
 
     public TravelActivityDTO convertTravelActivitySaveVOToDTO(TravelActivitySaveVO travelActivitySaveVO){
+        if(travelActivitySaveVO == null){
+            return null;
+        }
         TravelActivityDTO travelActivityDTO = new TravelActivityDTO();
         BeanUtils.copyProperties(travelActivitySaveVO, travelActivityDTO);
         return travelActivityDTO;
     }
 
     public TravelActivityDTO convertTravelActivityDOToDTO(TravelActivityDO travelActivityDO){
+        if(travelActivityDO == null){
+            return null;
+        }
         TravelActivityDTO travelActivityDTO = new TravelActivityDTO();
         BeanUtils.copyProperties(travelActivityDO, travelActivityDTO);
         travelActivityDTO.setHasRecruitedMemberList(JSON.parseObject(travelActivityDO.getHasRecruitedMemberList(), new TypeReference<List<Long>>(){}));
@@ -49,16 +59,19 @@ public class TravelActivityConvertor {
     }
 
     public TravelActivityDetailVO convertTravelActivityDTOToVO(TravelActivityDTO travelActivityDTO){
+        if(travelActivityDTO == null){
+            return null;
+        }
         TravelActivityDetailVO travelActivityDetailVO = new TravelActivityDetailVO();
         BeanUtils.copyProperties(travelActivityDTO, travelActivityDetailVO);
 
-//        UserVO creatorUser = userConvertor.convertDTOToVO(userService.getUserById(travelActivityDTO.getCreatorUid()));
-//        travelActivityDetailVO.setCreatorUser(creatorUser);
-//
-//        List<UserVO> userVOS = userConvertor.convertDOToVOList(userService.listUserById(travelActivityDTO.getHasRecruitedMemberList()));
-//        travelActivityDetailVO.setHasRecruitedMemberList(userVOS);
+        UserVO creatorUser = userConvertor.convertDTOToVO(userService.getUserById(travelActivityDTO.getCreatorUid()));
+        travelActivityDetailVO.setCreatorUser(creatorUser);
 
-        travelActivityDetailVO.setHasRecruitedMemberNumber(CollectionUtils.isEmpty(travelActivityDTO.getHasRecruitedMemberList())? 1: travelActivityDTO.getHasRecruitedMemberList().size()+1);
+        List<UserDTO> userDTOList = CollectionUtils.isEmpty(travelActivityDTO.getHasRecruitedMemberList())? new ArrayList<>():userService.listUserById(travelActivityDTO.getHasRecruitedMemberList());
+        travelActivityDetailVO.setHasRecruitedMemberList(userConvertor.convertDOToVOList(userDTOList));
+
+        travelActivityDetailVO.setHasRecruitedMemberNumber(travelActivityDTO.getHasRecruitedMemberList().size());
 
         return travelActivityDetailVO;
     }

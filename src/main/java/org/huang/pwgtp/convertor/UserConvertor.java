@@ -14,22 +14,25 @@ import java.util.stream.Collectors;
 public class UserConvertor {
 
     public UserDTO convertDOToDTO(UserDO userDO) {
+        if(userDO == null){
+            return null;
+        }
         UserDTO userDTO = new UserDTO();
         BeanUtils.copyProperties(userDO, userDTO);
         return userDTO;
     }
 
     public List<UserDTO> convertDOToDTOList(List<UserDO> userDOList) {
-        List<UserDTO> userDTOList = new ArrayList<>();
-        for(UserDO userDO : userDOList){
-            userDTOList.add(this.convertDOToDTO(userDO));
-        }
+        List<UserDTO> userDTOList = userDOList.stream().map(this::convertDOToDTO).collect(Collectors.toList());
         return userDTOList;
     }
 
 
 
     public UserVO convertDTOToVO(UserDTO userDTO) {
+        if(userDTO == null){
+            return null;
+        }
         UserVO userVO = new UserVO();
         BeanUtils.copyProperties(userDTO, userVO);
         return userVO;
