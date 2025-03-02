@@ -5,22 +5,7 @@ import lombok.Data;
 import java.util.Date;
 
 @Data
-public class UserDO {
-
-    /**
-     * id
-     */
-    private Long id;
-
-    /**
-     * 创建时间
-     */
-    private Date gmtCreate;
-
-    /**
-     * 修改时间
-     */
-    private Date gmtModified;
+public class UserDO extends BaseDO {
 
     /**
      * 名称
@@ -32,5 +17,9 @@ public class UserDO {
      */
     private String description;
 
+    /**
+     * 手机号码
+     */
+    private String mobilePhone;
 
 }

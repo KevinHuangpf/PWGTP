@@ -11,7 +11,7 @@ public interface TravelActivityMapper {
 
     long insert(@Param("travelActivityDO") TravelActivityDO travelActivityDO);
 
-    int updateById(@Param("travelActivityDO") TravelActivityDO travelActivityDO);
+    int updateById(TravelActivityDO travelActivityDO);
 
     TravelActivityDO getById(@Param("id") Long id);
 

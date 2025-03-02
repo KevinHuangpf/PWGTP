@@ -106,10 +106,10 @@ public class TravelActivityController {
 
     @Operation(summary = "加入行程活动")
     @PostMapping("/joinTravelActivity")
-    public CommonResult<Void> joinTravelActivity(@RequestParam @NotNull Long travelActivityId) {
+    public CommonResult<Void> joinTravelActivity(@RequestParam @NotNull Long travelActivityId, @RequestParam @NotNull Long userId) {
         try {
             log.info("TravelActivityController.joinTravelActivity start, travelActivityId: {}", travelActivityId);
-            travelActivityService.joinTravelActivity(travelActivityId,null);
+            travelActivityService.joinTravelActivity(travelActivityId,userId);
             return CommonResult.success(null);
         } catch (Exception e) {
             log.error("TravelActivityController.joinTravelActivity error, travelActivityId: {}", travelActivityId, e);

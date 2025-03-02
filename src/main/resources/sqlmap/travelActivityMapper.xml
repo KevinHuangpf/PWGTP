@@ -47,12 +47,11 @@
     <update id="updateById" parameterType="org.huang.pwgtp.repository.model.TravelActivityDO">
         update travel_activity
         <set>
+            gmt_modified = now(),
             <if test="gmtCreate != null">
                 gmt_create = #{gmtCreate,jdbcType=TIMESTAMP},
             </if>
-            <if test="gmtModified != null">
-                gmt_modified = #{gmtModified,jdbcType=TIMESTAMP},
-            </if>
+
             <if test="creatorUid != null">
                 creator_uid = #{creatorUid,jdbcType=BIGINT},
             </if>
@@ -101,6 +100,7 @@
     <update id="updateStatusById">
         update travel_activity
         <set>
+            gmt_modified = now(),
                 status = #{status,jdbcType=INTEGER},
         </set>
         where id = #{id,jdbcType=BIGINT}

@@ -5,34 +5,10 @@ import org.huang.pwgtp.common.bizEnum.TravelWayEnum;
 
 import java.util.Date;
 import java.util.List;
+import java.util.Set;
 
 @Data
-public class TravelActivityDTO {
-
-    /**
-     * id
-     */
-    private Long id;
-
-    /**
-     * 创建时间
-     */
-    private Date gmtCreate;
-
-    /**
-     * 修改时间
-     */
-    private Date gmtModified;
-
-    /**
-     * 创建人
-     */
-    private Long creatorUid;
-
-    /**
-     * 修改人
-     */
-    private Long modifierUid;
+public class TravelActivityDTO extends BaseDTO {
 
     /**
      * 行程名称
@@ -77,7 +53,7 @@ public class TravelActivityDTO {
     /**
      * 已经招募成员
      */
-    private List<Long> hasRecruitedMemberList;
+    private Set<Long> hasRecruitedMemberList;
 
     /**
      * 行程计划/攻略

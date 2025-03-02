@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.Arrays;
 import java.util.Objects;
+import java.util.Set;
 
 @Service
 public class TravelActivityService {
@@ -26,7 +27,7 @@ public class TravelActivityService {
 
 
     public Long createTravelActivity(TravelActivityDTO travelActivityDTO){
-        travelActivityDTO.setHasRecruitedMemberList(Arrays.asList(travelActivityDTO.getCreatorUid()));
+        travelActivityDTO.setHasRecruitedMemberList(Set.of(travelActivityDTO.getCreatorUid()));
         TravelActivityDO travelActivityDO = travelActivityConvertor.convertTravelActivityDTOToDO(travelActivityDTO);
         return travelActivityMapper.insert(travelActivityDO);
     }
@@ -57,6 +58,7 @@ public class TravelActivityService {
             throw new Exception("用户不存在，无法操作");
         }
         travelActivityDTO.getHasRecruitedMemberList().add(userId);
+
         TravelActivityDO travelActivityDONew = new TravelActivityDO();
         travelActivityDONew.setId(travelActivityId);
         travelActivityDONew.setHasRecruitedMemberList(JSON.toJSONString(travelActivityDTO.getHasRecruitedMemberList()));

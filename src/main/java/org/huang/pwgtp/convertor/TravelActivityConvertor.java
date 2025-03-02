@@ -16,6 +16,7 @@ import org.springframework.util.CollectionUtils;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 @Component
@@ -53,7 +54,7 @@ public class TravelActivityConvertor {
         }
         TravelActivityDTO travelActivityDTO = new TravelActivityDTO();
         BeanUtils.copyProperties(travelActivityDO, travelActivityDTO);
-        travelActivityDTO.setHasRecruitedMemberList(JSON.parseObject(travelActivityDO.getHasRecruitedMemberList(), new TypeReference<List<Long>>(){}));
+        travelActivityDTO.setHasRecruitedMemberList(JSON.parseObject(travelActivityDO.getHasRecruitedMemberList(), new TypeReference<Set<Long>>(){}));
         travelActivityDTO.setTravelWay(JSON.parseObject(travelActivityDO.getTravelWay(), new TypeReference<List<String>>(){}));
         return travelActivityDTO;
     }
@@ -68,7 +69,7 @@ public class TravelActivityConvertor {
         UserVO creatorUser = userConvertor.convertDTOToVO(userService.getUserById(travelActivityDTO.getCreatorUid()));
         travelActivityDetailVO.setCreatorUser(creatorUser);
 
-        List<UserDTO> userDTOList = CollectionUtils.isEmpty(travelActivityDTO.getHasRecruitedMemberList())? new ArrayList<>():userService.listUserById(travelActivityDTO.getHasRecruitedMemberList());
+        List<UserDTO> userDTOList = CollectionUtils.isEmpty(travelActivityDTO.getHasRecruitedMemberList())? new ArrayList<>():userService.listUserById((List<Long>) travelActivityDTO.getHasRecruitedMemberList());
         travelActivityDetailVO.setHasRecruitedMemberList(userConvertor.convertDOToVOList(userDTOList));
 
         travelActivityDetailVO.setHasRecruitedMemberNumber(travelActivityDTO.getHasRecruitedMemberList().size());

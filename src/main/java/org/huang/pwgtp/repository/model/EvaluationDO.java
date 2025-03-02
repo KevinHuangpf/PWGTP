@@ -7,17 +7,19 @@ import java.util.Date;
 @Data
 public class EvaluationDO extends BaseDO{
 
-
+    /**
+     * 评价类型
+     */
     private String type;
 
-    private String evaluationType;
-
-
+    /**
+     * 关联id
+     */
+    private Long travelActivityId;
 
     /**
      * 评价内容
      */
     private String evaluationContent;
-
 
 }
