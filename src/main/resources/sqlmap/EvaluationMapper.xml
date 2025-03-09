@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="org.huang.pwgtp.repository.EvaluationMapper">
+
+    <resultMap id="BaseResultMap" type="org.huang.pwgtp.repository.model.EvaluationDO">
+        <id column="id" jdbcType="BIGINT" property="id" />
+        <result column="gmt_create" jdbcType="TIMESTAMP" property="gmtCreate" />
+        <result column="gmt_modified" jdbcType="TIMESTAMP" property="gmtModified" />
+        <result column="creator_uid" jdbcType="BIGINT" property="creatorUid" />
+        <result column="modifier_uid" jdbcType="BIGINT" property="modifierUid" />
+        <result column="travel_id" jdbcType="BIGINT" property="travelId" />
+        <result column="evaluation_content" jdbcType="VARCHAR" property="evaluationContent" />
+
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        id, <include refid="Base_Column_List_WITHOUT_ID" />
+    </sql>
+
+    <sql id="Base_Column_List_WITHOUT_ID">
+        gmt_create, gmt_modified, creator_uid, modifier_uid, travel_id, evaluation_content
+    </sql>
+
+
+    <insert id="insert" parameterType="org.huang.pwgtp.repository.model.EvaluationDO" useGeneratedKeys="true" keyProperty="id">
+        insert into evaluation (<include refid="Base_Column_List_WITHOUT_ID" />)
+        values (now(), now(), #{creatorUid}, #{modifierUid}, #{travelId},  #{evaluationContent})
+    </insert>
+
+
+    <select id="getById" parameterType="java.lang.Long" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List" />
+        from evaluation
+        where id = #{id}
+        AND deleted = 0
+    </select>
+
+
+    <select id="list" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List" />
+        from evaluation
+        where deleted = 0
+        AND travel_id = #{travelId}
+    </select>
+
+
+    <update id="deleteById">
+        update evaluation
+        <set>
+            deleted = 1
+        </set>
+        where id = #{id}
+    </update>
+
+
+</mapper>

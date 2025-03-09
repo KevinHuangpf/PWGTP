@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="org.huang.pwgtp.repository.FavoriteMapper">
+
+    <resultMap id="BaseResultMap" type="org.huang.pwgtp.repository.model.FavoriteDO">
+        <id column="id" jdbcType="BIGINT" property="id" />
+        <result column="gmt_create" jdbcType="TIMESTAMP" property="gmtCreate" />
+        <result column="gmt_modified" jdbcType="TIMESTAMP" property="gmtModified" />
+        <result column="creator_uid" jdbcType="BIGINT" property="creatorUid" />
+        <result column="modifier_uid" jdbcType="BIGINT" property="modifierUid" />
+        <result column="favorite_type" jdbcType="VARCHAR" property="favoriteType" />
+        <result column="associate_id" jdbcType="BIGINT" property="associateId" />
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        id, <include refid="Base_Column_List_WITHOUT_ID" />
+    </sql>
+
+    <sql id="Base_Column_List_WITHOUT_ID">
+        gmt_create, gmt_modified, creator_uid, modifier_uid,favorite_type, associate_id
+    </sql>
+
+
+
+    <insert id="insert" parameterType="org.huang.pwgtp.repository.model.FavoriteDO" useGeneratedKeys="true" keyProperty="id">
+        insert into favorite (<include refid="Base_Column_List_WITHOUT_ID" />)
+        values (now(), now(), #{creatorUid}, #{modifierUid}, #{favoriteType}, #{associateId})
+    </insert>
+
+
+    <select id="getById" parameterType="java.lang.Long" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List" />
+        from favorite
+        where id = #{id}
+        AND deleted = 0
+    </select>
+
+
+    <select id="list" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List" />
+        from favorite
+        where deleted = 0
+        AND creator_uid = #{creatorUid}
+        <if test="favoriteType != null">
+            AND favorite_type = #{favoriteType}
+        </if>
+        <if test="associateId != null">
+            AND associate_id = #{associateId}
+        </if>
+
+    </select>
+
+
+    <update id="deleteById">
+        update favorite
+        <set>
+            deleted = 1
+        </set>
+        where id = #{id}
+    </update>
+
+
+</mapper>

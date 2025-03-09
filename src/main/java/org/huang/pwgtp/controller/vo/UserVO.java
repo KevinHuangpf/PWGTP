@@ -1,13 +1,26 @@
-package org.huang.pwgtp.repository.model;
+package org.huang.pwgtp.controller.vo;
 
 import lombok.Data;
 
 import java.util.Date;
 
 @Data
-public class UserDO extends BaseDO {
+public class UserVO {
 
+    /**
+     * id
+     */
+    private Long id;
 
+    /**
+     * 创建时间
+     */
+    private Date gmtCreate;
+
+    /**
+     * 修改时间
+     */
+    private Date gmtModified;
 
     /**
      * 名称
@@ -18,11 +31,6 @@ public class UserDO extends BaseDO {
      * 手机号
      */
     private String mobilePhone;
-
-    /**
-     * 密码
-     */
-    private String password;
 
     /**
      * 描述

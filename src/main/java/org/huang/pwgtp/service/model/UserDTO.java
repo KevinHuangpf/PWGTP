@@ -2,13 +2,14 @@ package org.huang.pwgtp.service.model;
 
 import lombok.Data;
 
-@Data
-public class UserDTO {
+import java.io.Serial;
+import java.util.Date;
 
-    /**
-     * id
-     */
-    private Long id;
+@Data
+public class UserDTO extends BaseDTO {
+
+    @Serial
+    private static final long serialVersionUID = 6184250008293686331L;
 
     /**
      * 名称
@@ -16,18 +17,18 @@ public class UserDTO {
     private String name;
 
     /**
+     * 手机号
+     */
+    private String mobilePhone;
+
+    /**
+     * 密码
+     */
+    private String password;
+
+    /**
      * 描述
      */
     private String description;
-
-    /**
-     * 手机号
-     */
-    private String phone;
-
-    /**
-     * 邮箱
-     */
-    private String email;
 
 }

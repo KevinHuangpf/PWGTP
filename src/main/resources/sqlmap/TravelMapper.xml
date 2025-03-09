@@ -1,0 +1,129 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="org.huang.pwgtp.repository.TravelMapper">
+
+    <resultMap id="BaseResultMap" type="org.huang.pwgtp.repository.model.TravelDO">
+        <id column="id" jdbcType="BIGINT" property="id" />
+        <result column="gmt_create" jdbcType="TIMESTAMP" property="gmtCreate" />
+        <result column="gmt_modified" jdbcType="TIMESTAMP" property="gmtModified" />
+        <result column="creator_uid" jdbcType="BIGINT" property="creatorUid" />
+        <result column="modifier_uid" jdbcType="BIGINT" property="modifierUid" />
+        <result column="name" jdbcType="VARCHAR" property="name" />
+        <result column="description" jdbcType="VARCHAR" property="description" />
+        <result column="status" jdbcType="INTEGER" property="status" />
+        <result column="travel_type" jdbcType="VARCHAR" property="travelType" />
+        <result column="travel_way" jdbcType="VARCHAR" property="travelWay" />
+        <result column="travel_start_time" jdbcType="TIMESTAMP" property="travelStartTime" />
+        <result column="travel_end_time" jdbcType="TIMESTAMP" property="travelEndTime" />
+        <result column="plan_recruit_member_number" jdbcType="INTEGER" property="planRecruitMemberNumber" />
+        <result column="has_recruited_member_list" jdbcType="VARCHAR" property="hasRecruitedMemberList" />
+        <result column="travel_plan" jdbcType="VARCHAR" property="travelPlan" />
+
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        id, <include refid="Base_Column_List_WITHOUT_ID" />
+    </sql>
+
+    <sql id="Base_Column_List_WITHOUT_ID">
+        gmt_create, gmt_modified, creator_uid, modifier_uid,name, description, status, travel_type, travel_way, travel_start_time, travel_end_time, plan_recruit_member_number, has_recruited_member_list, travel_plan
+    </sql>
+
+
+    <insert id="insert" parameterType="org.huang.pwgtp.repository.model.TravelDO" useGeneratedKeys="true" keyProperty="id">
+        insert into travel ( <include refid="Base_Column_List_WITHOUT_ID" />)
+        values (now(), now() , #{creatorUid,jdbcType=BIGINT}, #{modifierUid,jdbcType=BIGINT}, #{name,jdbcType=VARCHAR}, #{description,jdbcType=VARCHAR}, #{status,jdbcType=INTEGER}, #{travelType,jdbcType=VARCHAR}, #{travelWay,jdbcType=VARCHAR},
+                 #{travelStartTime,jdbcType=TIMESTAMP}, #{travelEndTime,jdbcType=TIMESTAMP}, #{planRecruitMemberNumber,jdbcType=INTEGER}, #{hasRecruitedMemberList,jdbcType=VARCHAR}, #{travelPlan,jdbcType=VARCHAR}
+                )
+    </insert>
+
+    <update id="updateById" parameterType="org.huang.pwgtp.repository.model.TravelDO">
+        update travel
+        <set>
+            gmt_modified = now(),
+            <if test="gmtCreate != null">
+                gmt_create = #{gmtCreate,jdbcType=TIMESTAMP},
+            </if>
+
+            <if test="creatorUid != null">
+                creator_uid = #{creatorUid,jdbcType=BIGINT},
+            </if>
+            <if test="modifierUid != null">
+                modifier_uid = #{modifierUid,jdbcType=BIGINT},
+            </if>
+            <if test="name != null">
+                name = #{name,jdbcType=VARCHAR},
+            </if>
+            <if test="description != null">
+                description = #{description,jdbcType=VARCHAR},
+            </if>
+            <if test="status != null">
+                status = #{status,jdbcType=INTEGER},
+            </if>
+            <if test="travelType != null">
+                travel_type = #{travelType,jdbcType=VARCHAR},
+            </if>
+            <if test="travelWay != null">
+                travel_way = #{travelWay,jdbcType=VARCHAR},
+            </if>
+            <if test="travelStartTime != null">
+                travel_start_time = #{travelStartTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="travelEndTime != null">
+                travel_end_time = #{travelEndTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="planRecruitMemberNumber != null">
+                plan_recruit_member_number = #{planRecruitMemberNumber,jdbcType=INTEGER},
+            </if>
+            <if test="hasRecruitedMemberList != null">
+                has_recruited_member_list = #{hasRecruitedMemberList,jdbcType=VARCHAR},
+            </if>
+
+            <if test="travelPlan != null">
+                travel_plan = #{travelPlan,jdbcType=VARCHAR},
+            </if>
+
+        </set>
+        where id = #{id}
+    </update>
+
+    <update id="updateStatusById">
+        update travel
+        <set>
+            gmt_modified = now(),
+            status = #{status},
+        </set>
+        where id = #{id}
+    </update>
+
+
+    <select id="getById" parameterType="java.lang.Long" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List" />
+        from travel
+        where id = #{id}
+        AND deleted = 0
+    </select>
+
+    <select id="list" parameterType="java.lang.String" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List" />
+        from travel
+        where
+            <if test="fuzzyKey != null and fuzzyKey != ''">
+                (name LIKE CONCAT('%', #{fuzzyKey}, '%') OR description LIKE CONCAT('%', #{fuzzyKey}, '%')  )
+                AND
+            </if>
+     deleted = 0
+    </select>
+
+    <update id="deleteById">
+        update travel
+        <set>
+                deleted = 1
+        </set>
+        where id = #{id}
+    </update>
+
+
+</mapper>

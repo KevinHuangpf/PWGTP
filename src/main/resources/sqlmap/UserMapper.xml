@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="org.huang.pwgtp.repository.UserMapper">
+
+    <resultMap id="BaseResultMap" type="org.huang.pwgtp.repository.model.UserDO">
+        <id column="id" jdbcType="BIGINT" property="id" />
+        <result column="gmt_create" jdbcType="TIMESTAMP" property="gmtCreate" />
+        <result column="gmt_modified" jdbcType="TIMESTAMP" property="gmtModified" />
+        <result column="name" jdbcType="VARCHAR" property="name" />
+        <result column="mobile_phone" jdbcType="VARCHAR" property="mobilePhone" />
+        <result column="password" jdbcType="VARCHAR" property="password" />
+        <result column="description" jdbcType="VARCHAR" property="description" />
+
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        id, <include refid="Base_Column_List_WITHOUT_ID" />
+    </sql>
+
+    <sql id="Base_Column_List_WITHOUT_ID">
+        gmt_create, gmt_modified, name, mobile_phone, password, description
+    </sql>
+
+
+    <insert id="insert" parameterType="org.huang.pwgtp.repository.model.UserDO" useGeneratedKeys="true" keyProperty="id">
+        insert into user (gmt_create, gmt_modified, name, mobile_phone, password, description)
+        values (now(), now(),#{name,jdbcType=VARCHAR}, #{mobilePhone,jdbcType=VARCHAR}, #{password,jdbcType=VARCHAR},#{description,jdbcType=VARCHAR})
+    </insert>
+
+    <update id="updateById" parameterType="org.huang.pwgtp.repository.model.UserDO">
+        update user
+        <set>
+            gmt_modified = now()
+            <if test="description !=null">
+                ,description = #{description}
+            </if>
+            <if test="mobilePhone !=null">
+                ,mobile_phone = #{mobilePhone}
+            </if>
+        </set>
+        where id = #{id}
+    </update>
+
+    <select id="getById" parameterType="java.lang.Long" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List" />
+        from user
+        where id = #{id}
+        AND deleted = 0
+    </select>
+
+
+    <select id="getByName" parameterType="java.lang.String" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List" />
+        from user
+        where name = #{name}
+        AND deleted = 0
+    </select>
+
+    <select id="listByIds" parameterType="java.util.List" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List" />
+        from user
+        where id in
+        <foreach close=")" collection="list" item="id" open="(" separator=",">
+            #{id}
+        </foreach>
+        AND deleted = 0
+    </select>
+
+
+
+
+</mapper>
