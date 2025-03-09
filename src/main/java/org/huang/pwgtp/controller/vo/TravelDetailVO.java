@@ -2,7 +2,6 @@ package org.huang.pwgtp.controller.vo;
 
 
 import lombok.Data;
-import org.huang.pwgtp.common.bizEnum.TravelWayEnum;
 
 import java.util.Date;
 import java.util.List;
@@ -87,11 +86,5 @@ public class TravelDetailVO {
      * 行程计划/攻略
      */
     private String travelPlan;
-
-    /**
-     * 评价列表
-     */
-    private List<EvaluationVO> evaluationVOList;
-
 
 }
