@@ -24,7 +24,7 @@
 
     <insert id="insert" parameterType="org.huang.pwgtp.repository.model.UserDO" useGeneratedKeys="true" keyProperty="id">
         insert into user (gmt_create, gmt_modified, name, mobile_phone, password, description)
-        values (now(), now(),#{name,jdbcType=VARCHAR}, #{mobilePhone,jdbcType=VARCHAR}, #{password,jdbcType=VARCHAR},#{description,jdbcType=VARCHAR})
+        values (now(), now(), #{name} , #{mobilePhone} , #{password} ,#{description})
     </insert>
 
     <update id="updateById" parameterType="org.huang.pwgtp.repository.model.UserDO">

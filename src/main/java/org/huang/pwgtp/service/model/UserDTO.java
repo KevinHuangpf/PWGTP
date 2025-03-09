@@ -1,6 +1,7 @@
 package org.huang.pwgtp.service.model;
 
 import lombok.Data;
+import lombok.experimental.Accessors;
 
 import java.io.Serial;
 import java.util.Date;
