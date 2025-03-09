@@ -5,7 +5,7 @@ import lombok.Data;
 import java.util.Date;
 
 @Data
-public class UserVO {
+public class EvaluationVO {
 
     /**
      * id
@@ -18,23 +18,20 @@ public class UserVO {
     private Date gmtCreate;
 
     /**
-     * 修改时间
+     * 创建人
      */
-    private Date gmtModified;
+    private UserVO creator;
 
     /**
-     * 名称
+     * 关联travelId
      */
-    private String name;
+    private Long travelId;
 
     /**
-     * 手机号
+     * 评价内容
      */
-    private String mobilePhone;
+    private String evaluationContent;
 
-    /**
-     * 描述
-     */
-    private String description;
+
 
 }

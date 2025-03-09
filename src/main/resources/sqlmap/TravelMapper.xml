@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="org.huang.pwgtp.repository.TravelActivityMapper">
+<mapper namespace="org.huang.pwgtp.repository.TravelMapper">
 
-    <resultMap id="BaseResultMap" type="org.huang.pwgtp.repository.model.TravelActivityDO">
+    <resultMap id="BaseResultMap" type="org.huang.pwgtp.repository.model.TravelDO">
         <id column="id" jdbcType="BIGINT" property="id" />
         <result column="gmt_create" jdbcType="TIMESTAMP" property="gmtCreate" />
         <result column="gmt_modified" jdbcType="TIMESTAMP" property="gmtModified" />
@@ -18,7 +18,6 @@
         <result column="plan_recruit_member_number" jdbcType="INTEGER" property="planRecruitMemberNumber" />
         <result column="has_recruited_member_list" jdbcType="VARCHAR" property="hasRecruitedMemberList" />
         <result column="travel_plan" jdbcType="VARCHAR" property="travelPlan" />
-        <result column="deleted" jdbcType="INTEGER" property="deleted" />
 
     </resultMap>
 
@@ -27,25 +26,19 @@
     </sql>
 
     <sql id="Base_Column_List_WITHOUT_ID">
-        gmt_create, gmt_modified, creator_uid, modifier_uid,name, description, status, travel_type, travel_way, travel_start_time, travel_end_time, plan_recruit_member_number, has_recruited_member_list, travel_plan, deleted
+        gmt_create, gmt_modified, creator_uid, modifier_uid,name, description, status, travel_type, travel_way, travel_start_time, travel_end_time, plan_recruit_member_number, has_recruited_member_list, travel_plan
     </sql>
 
 
-    <select id="getById" parameterType="java.lang.Long" resultMap="BaseResultMap">
-        select
-        <include refid="Base_Column_List" />
-        from travel_activity
-        where id = #{id,jdbcType=BIGINT}
-        AND deleted = 0
-    </select>
-
-    <insert id="insert" parameterType="org.huang.pwgtp.repository.model.TravelActivityDO" useGeneratedKeys="true" keyProperty="id">
-        insert into travel_activity ( <include refid="Base_Column_List_WITHOUT_ID" />)
-        values (#{gmtCreate,jdbcType=TIMESTAMP}, #{gmtModified,jdbcType=TIMESTAMP},#{creatorUid,jdbcType=BIGINT}, #{modifierUid,jdbcType=BIGINT}, #{name,jdbcType=VARCHAR}, #{description,jdbcType=VARCHAR}, #{status,jdbcType=INTEGER}, #{travelType,jdbcType=VARCHAR}, #{travelWay,jdbcType=VARCHAR}, #{travelStartTime,jdbcType=TIMESTAMP}, #{travelEndTime,jdbcType=TIMESTAMP}, #{planRecruitMemberNumber,jdbcType=INTEGER}, #{hasRecruitedMemberList,jdbcType=VARCHAR}, #{travelPlan,jdbcType=VARCHAR}, #{deleted,jdbcType=INTEGER})
+    <insert id="insert" parameterType="org.huang.pwgtp.repository.model.TravelDO" useGeneratedKeys="true" keyProperty="id">
+        insert into travel ( <include refid="Base_Column_List_WITHOUT_ID" />)
+        values (now(), now() , #{creatorUid,jdbcType=BIGINT}, #{modifierUid,jdbcType=BIGINT}, #{name,jdbcType=VARCHAR}, #{description,jdbcType=VARCHAR}, #{status,jdbcType=INTEGER}, #{travelType,jdbcType=VARCHAR}, #{travelWay,jdbcType=VARCHAR},
+                 #{travelStartTime,jdbcType=TIMESTAMP}, #{travelEndTime,jdbcType=TIMESTAMP}, #{planRecruitMemberNumber,jdbcType=INTEGER}, #{hasRecruitedMemberList,jdbcType=VARCHAR}, #{travelPlan,jdbcType=VARCHAR}
+                )
     </insert>
 
-    <update id="updateById" parameterType="org.huang.pwgtp.repository.model.TravelActivityDO">
-        update travel_activity
+    <update id="updateById" parameterType="org.huang.pwgtp.repository.model.TravelDO">
+        update travel
         <set>
             gmt_modified = now(),
             <if test="gmtCreate != null">
@@ -89,37 +82,47 @@
             <if test="travelPlan != null">
                 travel_plan = #{travelPlan,jdbcType=VARCHAR},
             </if>
-            <if test="deleted != null">
-                deleted = #{deleted,jdbcType=INTEGER},
-            </if>
 
         </set>
-        where id = #{id,jdbcType=BIGINT}
+        where id = #{id}
     </update>
 
     <update id="updateStatusById">
-        update travel_activity
+        update travel
         <set>
             gmt_modified = now(),
-                status = #{status,jdbcType=INTEGER},
+            status = #{status},
         </set>
-        where id = #{id,jdbcType=BIGINT}
+        where id = #{id}
     </update>
 
-    <update id="updateHasRecruitedMemberListById">
-        update travel_activity
-        <set>
-                has_recruited_member_list = #{hasRecruitedMemberList,jdbcType=VARCHAR},
-        </set>
-        where id = #{id,jdbcType=BIGINT}
-    </update>
+
+    <select id="getById" parameterType="java.lang.Long" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List" />
+        from travel
+        where id = #{id}
+        AND deleted = 0
+    </select>
+
+    <select id="list" parameterType="java.lang.String" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List" />
+        from travel
+        where
+            <if test="fuzzyKey != null and fuzzyKey != ''">
+                (name LIKE CONCAT('%', #{fuzzyKey}, '%') OR description LIKE CONCAT('%', #{fuzzyKey}, '%')  )
+                AND
+            </if>
+     deleted = 0
+    </select>
 
     <update id="deleteById">
-        update travel_activity
+        update travel
         <set>
-                deleted = 1,
+                deleted = 1
         </set>
-        where id = #{id,jdbcType=BIGINT}
+        where id = #{id}
     </update>
 
 

@@ -5,6 +5,7 @@ import org.huang.pwgtp.service.model.UserDTO;
 import org.huang.pwgtp.controller.vo.UserVO;
 import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Component;
+import org.springframework.util.CollectionUtils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -39,8 +40,10 @@ public class UserConvertor {
     }
 
     public List<UserVO> convertDOToVOList(List<UserDTO> userDTOList) {
-        List<UserVO> userVOList = userDTOList.stream().map(this::convertDTOToVO).collect(Collectors.toList());
-        return userVOList;
+        if(CollectionUtils.isEmpty(userDTOList)){
+            return new ArrayList<>();
+        }
+        return userDTOList.stream().map(this::convertDTOToVO).collect(Collectors.toList());
     }
 
 }

@@ -1,17 +1,19 @@
-package org.huang.pwgtp.repository.model;
+package org.huang.pwgtp.service.model;
 
 import lombok.Data;
-import org.huang.pwgtp.common.bizEnum.TravelWayEnum;
+import org.huang.pwgtp.common.bizEnum.*;
 
+import java.io.Serial;
+import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
+import java.util.Set;
 
-/**
- * 行程活动
- */
 @Data
-public class TravelActivityDO extends BaseDO{
+public class TravelDTO extends BaseDTO implements Serializable {
 
+    @Serial
+    private static final long serialVersionUID = -3352740424181813082L;
 
     /**
      * 行程名称
@@ -23,15 +25,15 @@ public class TravelActivityDO extends BaseDO{
      */
     private String description;
 
-
     /**
      * 行程状态
-     * {@link org.huang.pwgtp.common.bizEnum.TravelActivityStatusEnum}
+     * {@link TravelStatusEnum}
      */
     private String status;
 
     /**
      * 行程类型
+     * {@link TravelTypeEnum}
      */
     private String travelType;
 
@@ -39,9 +41,8 @@ public class TravelActivityDO extends BaseDO{
      * 出行方式
      * 可多选
      * {@link TravelWayEnum}
-     * List<Long> jsonString
      */
-    private String travelWay;
+    private List<String> travelWayList;
 
     /**
      * 行程开始时间
@@ -59,22 +60,14 @@ public class TravelActivityDO extends BaseDO{
      */
     private Integer planRecruitMemberNumber;
 
-
     /**
      * 已经招募成员
-     * List<Long> jsonString
      */
-    private String hasRecruitedMemberList;
+    private Set<Long> hasRecruitedMemberList;
 
     /**
      * 行程计划/攻略
      */
     private String travelPlan;
-
-    /**
-     * 删除状态
-     * 1=删除，0未删除，默认0
-     */
-    private Integer deleted;
 
 }

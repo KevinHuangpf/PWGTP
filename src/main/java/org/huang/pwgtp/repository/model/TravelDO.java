@@ -1,14 +1,16 @@
-package org.huang.pwgtp.service.model;
+package org.huang.pwgtp.repository.model;
 
 import lombok.Data;
+import org.huang.pwgtp.common.bizEnum.TravelStatusEnum;
 import org.huang.pwgtp.common.bizEnum.TravelWayEnum;
 
 import java.util.Date;
-import java.util.List;
-import java.util.Set;
 
+/**
+ * 行程活动
+ */
 @Data
-public class TravelActivityDTO extends BaseDTO {
+public class TravelDO extends BaseDO{
 
     /**
      * 行程名称
@@ -22,17 +24,23 @@ public class TravelActivityDTO extends BaseDTO {
 
 
     /**
+     * 行程状态
+     * {@link TravelStatusEnum}
+     */
+    private String status;
+
+    /**
      * 行程类型
      */
     private String travelType;
-
 
     /**
      * 出行方式
      * 可多选
      * {@link TravelWayEnum}
+     * List<Long> jsonString
      */
-    private List<String> travelWay;
+    private String travelWay;
 
     /**
      * 行程开始时间
@@ -50,14 +58,17 @@ public class TravelActivityDTO extends BaseDTO {
      */
     private Integer planRecruitMemberNumber;
 
+
     /**
      * 已经招募成员
+     * List<Long> jsonString
      */
-    private Set<Long> hasRecruitedMemberList;
+    private String hasRecruitedMemberList;
 
     /**
      * 行程计划/攻略
      */
     private String travelPlan;
+
 
 }

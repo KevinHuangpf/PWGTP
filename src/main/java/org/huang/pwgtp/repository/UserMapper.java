@@ -14,6 +14,8 @@ public interface UserMapper {
 
     UserDO getById(Long id);
 
+    UserDO getByName(String name);
+
     List<UserDO> listByIds(List<Long> ids);
 
 }

@@ -1,5 +1,8 @@
 package org.huang.pwgtp.common.bizEnum;
 
+import java.sql.Array;
+import java.util.Arrays;
+
 /**
  * 出行方式枚举
  */
@@ -14,5 +17,11 @@ public enum TravelWayEnum {
     ;
     private String desc;
 
-    private TravelWayEnum(String desc) {}
+    private TravelWayEnum(String desc) {
+        this.desc = desc;
+    }
+
+    public static String getDescByName(String name) {
+        return Arrays.stream(TravelWayEnum.values()).filter(item -> item.name().equals(name)).findFirst().map(item -> item.desc).orElse(null);
+    }
 }

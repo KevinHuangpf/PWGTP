@@ -29,4 +29,7 @@
     - 管理话题
 
 ## 项目注意
-    部署后访问：http://localhost:8080/doc.html#/home
+    部署后访问：
+    (1)api 接口：http://localhost:8080/doc.html#/home
+    (2)调用前需登录：http://localhost:8080/login.html
+    (3)登录后自动跳转到首页：http://localhost:8080/index.html

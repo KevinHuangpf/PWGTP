@@ -8,7 +8,7 @@ import java.util.Date;
 import java.util.List;
 
 @Data
-public class TravelActivityDetailVO {
+public class TravelDetailVO {
 
     /**
      * id
@@ -28,7 +28,7 @@ public class TravelActivityDetailVO {
     /**
      * 创建人
      */
-    private UserVO creatorUser;
+    private UserVO creator;
 
 
     /**
@@ -43,17 +43,20 @@ public class TravelActivityDetailVO {
 
 
     /**
-     * 行程类型
+     * 行程状态描述
      */
-    private String travelType;
-
+    private String statusDesc;
 
     /**
-     * 出行方式
-     * 可多选
-     * {@link TravelWayEnum}
+     * 行程类型描述
      */
-    private List<String> travelWay;
+    private String travelTypeDesc;
+
+    /**
+     * 出行方式描述
+     * 可多选
+     */
+    private List<String> travelWayDescList;
 
     /**
      * 行程开始时间
@@ -85,6 +88,10 @@ public class TravelActivityDetailVO {
      */
     private String travelPlan;
 
+    /**
+     * 评价列表
+     */
+    private List<EvaluationVO> evaluationVOList;
 
 
 }
