@@ -35,6 +35,7 @@
     (3)登录后自动跳转到首页：http://localhost:8080/index.html
 
 
+
 建表语句：
 -- pwgtp.travel definition
 
