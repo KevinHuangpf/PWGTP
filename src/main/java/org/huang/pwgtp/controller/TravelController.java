@@ -23,7 +23,6 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequestMapping("travel")
 @Tag(name = "travelApi")
-@Validated
 public class TravelController {
 
     @Autowired
@@ -38,7 +37,7 @@ public class TravelController {
 
     @Operation(summary = "新建出行")
     @PostMapping("/create")
-    public CommonResult<Void> create(@RequestBody @NotNull TravelSaveVO travelSaveVO) {
+    public CommonResult<Void> create(@RequestBody TravelSaveVO travelSaveVO) {
         try {
             log.info("TravelController.create start, travelSaveVO: {}", JSON.toJSONString(travelSaveVO));
             TravelDTO travelDTO = travelConvertor.convertTravelSaveVOToDTO(travelSaveVO);
@@ -53,9 +52,12 @@ public class TravelController {
 
     @Operation(summary = "编辑行程")
     @PostMapping("/edit")
-    public CommonResult<Void> edit(@RequestBody @NotNull TravelSaveVO travelSaveVO) {
+    public CommonResult<Void> edit(@RequestBody TravelSaveVO travelSaveVO) {
         try {
             log.info("TravelController.edit start, travelSaveVO: {}", JSON.toJSONString(travelSaveVO));
+            if(travelSaveVO.getId() == null){
+                return CommonResult.validateFailed("参数有误");
+            }
             TravelDTO travelDTO = travelConvertor.convertTravelSaveVOToDTO(travelSaveVO);
             travelDTO.setCreatorUid(userService.getCurrentUser().getId());
             travelService.editTravel(travelDTO);
@@ -69,8 +71,11 @@ public class TravelController {
 
     @Operation(summary = "发布行程")
     @PostMapping("/publish")
-    public CommonResult<Void> publish(@RequestParam @NotNull Long travelId) {
+    public CommonResult<Void> publish(@RequestParam Long travelId) {
         try {
+            if(travelId == null){
+                return CommonResult.validateFailed("参数有误");
+            }
             log.info("TravelController.publish start, travelId: {}", travelId);
             travelService.updateTravelStatus(travelId, TravelStatusEnum.PUBLISHED.name());
             return CommonResult.success(null);
@@ -149,6 +154,7 @@ public class TravelController {
             CommonPage<TravelDTO> commonPageDTO = travelService.listTravelByPage(pageNum, pageSize, fuzzyKey);
             CommonPage<TravelDetailVO> commonPageVO = new CommonPage<>();
             BeanUtils.copyProperties(commonPageDTO, commonPageVO);
+            // todo A:看到A的全部及B的已经发布的；B: 看到B的全部及A的已经发布的；
             commonPageVO.setList(travelConvertor.convertTravelDTOToVOList(commonPageDTO.getList()));
             return CommonResult.success(commonPageVO);
         } catch (Exception e) {

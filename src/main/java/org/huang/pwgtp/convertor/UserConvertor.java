@@ -3,6 +3,7 @@ package org.huang.pwgtp.convertor;
 import org.huang.pwgtp.repository.model.UserDO;
 import org.huang.pwgtp.service.model.UserDTO;
 import org.huang.pwgtp.controller.vo.UserVO;
+import org.huang.pwgtp.util.ConvertUtil;
 import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Component;
 import org.springframework.util.CollectionUtils;
@@ -18,14 +19,11 @@ public class UserConvertor {
         if(userDO == null){
             return null;
         }
-        UserDTO userDTO = new UserDTO();
-        BeanUtils.copyProperties(userDO, userDTO);
-        return userDTO;
+        return ConvertUtil.convert(UserDTO.class, userDO);
     }
 
     public List<UserDTO> convertDOToDTOList(List<UserDO> userDOList) {
-        List<UserDTO> userDTOList = userDOList.stream().map(this::convertDOToDTO).collect(Collectors.toList());
-        return userDTOList;
+        return userDOList.stream().map(this::convertDOToDTO).collect(Collectors.toList());
     }
 
 
@@ -34,9 +32,7 @@ public class UserConvertor {
         if(userDTO == null){
             return null;
         }
-        UserVO userVO = new UserVO();
-        BeanUtils.copyProperties(userDTO, userVO);
-        return userVO;
+        return ConvertUtil.convert(UserVO.class, userDTO);
     }
 
     public List<UserVO> convertDOToVOList(List<UserDTO> userDTOList) {

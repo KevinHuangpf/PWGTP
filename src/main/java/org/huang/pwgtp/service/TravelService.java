@@ -72,13 +72,14 @@ public class TravelService {
 
 
     public void joinTravel(Long travelId, Long userId) throws Exception{
+        // todo 并发问题 redis
+
         TravelDTO travelDTO = this.getTravelById(travelId);
         if(Objects.isNull(travelDTO)){
             throw new Exception("行程不存在，无法操作");
         }
-        UserDTO userDTO = userService.getUserById(userId);
-        if(Objects.isNull(userDTO)){
-            throw new Exception("用户不存在，无法操作");
+        if(travelDTO.getHasRecruitedMemberList().size() >= travelDTO.getPlanRecruitMemberNumber()){
+            throw new Exception("行程已满员，无法操作");
         }
         travelDTO.getHasRecruitedMemberList().add(userId);
 

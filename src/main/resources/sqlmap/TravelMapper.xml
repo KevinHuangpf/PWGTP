@@ -91,7 +91,7 @@
         update travel
         <set>
             gmt_modified = now(),
-            status = #{status},
+            status = #{status}
         </set>
         where id = #{id}
     </update>

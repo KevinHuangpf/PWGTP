@@ -33,10 +33,6 @@ public class TravelConvertor {
     @Autowired
     private UserConvertor userConvertor;
 
-    @Autowired
-    private EvaluationService evaluationService;
-
-
     public TravelDO convertTravelDTOToDO(TravelDTO travelDTO){
         if(travelDTO == null){
             return null;

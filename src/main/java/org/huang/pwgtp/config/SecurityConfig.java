@@ -23,7 +23,6 @@ public class SecurityConfig {
     public SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity) throws Exception{
         httpSecurity.authorizeHttpRequests(request -> request
                         .requestMatchers(
-                                "/user/login",
                                 "/user/register",
                                 "/user/logout",
                                 "/login.html"
