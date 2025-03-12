@@ -9,6 +9,7 @@ import org.huang.pwgtp.common.CommonPage;
 import org.huang.pwgtp.common.CommonResult;
 import org.huang.pwgtp.common.bizEnum.TravelStatusEnum;
 import org.huang.pwgtp.convertor.TravelConvertor;
+import org.huang.pwgtp.service.AIService;
 import org.huang.pwgtp.service.TravelService;
 import org.huang.pwgtp.service.UserService;
 import org.huang.pwgtp.service.model.TravelDTO;
@@ -34,6 +35,9 @@ public class TravelController {
     @Autowired
     private TravelConvertor travelConvertor;
 
+
+    @Autowired
+    private AIService aiService;
 
     @Operation(summary = "新建出行")
     @PostMapping("/create")
@@ -162,6 +166,19 @@ public class TravelController {
             return CommonResult.failed(e.getMessage());
         }
 
+    }
+
+
+    @Operation(summary = "ai获取旅行攻略")
+    @PostMapping("/askForTravelPlan")
+    public CommonResult<String> askForTravelPlan(@RequestParam @NotNull String userAskContent) {
+        try {
+            log.info("TravelController.askForTravelPlan start, userAskContent: {}", userAskContent);
+            return CommonResult.success(aiService.askForTravelPlan(userAskContent));
+        } catch (Exception e) {
+            log.error("TravelController.askForTravelPlan error, userAskContent: {}", userAskContent, e);
+            return CommonResult.failed(e.getMessage());
+        }
     }
 
 
