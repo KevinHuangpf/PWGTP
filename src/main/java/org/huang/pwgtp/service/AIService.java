@@ -34,7 +34,7 @@ public class AIService {
         // 组合参赛
         GenerationParam param = GenerationParam.builder()
                 .apiKey("sk-39fafc54b53a4a7987273a1d83c4ccea")
-                .model("qwen-max")
+                .model("qwen-max").topP(0.7)
                 .messages(Arrays.asList(systemMsg, userMsg))
                 .resultFormat(GenerationParam.ResultFormat.MESSAGE)
                 .enableSearch(true) // 开启联网搜索功能

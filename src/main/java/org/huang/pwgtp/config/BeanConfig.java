@@ -12,6 +12,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 public class BeanConfig {
 
     @Bean
+    //这个Bean用于密码加密，采用BCrypt算法。
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
     }

@@ -20,6 +20,7 @@ public class SecurityConfig {
 
 
     @Bean
+    //过滤链
     public SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity) throws Exception{
         httpSecurity.authorizeHttpRequests(request -> request
                         .requestMatchers(

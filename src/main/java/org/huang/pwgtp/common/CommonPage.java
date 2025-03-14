@@ -33,7 +33,7 @@ public class CommonPage<T> {
     private List<T> list;
 
     /**
-     * 将PageHelper分页后的list转为分页信息
+     * 将PageHelper分页后的list转为分页信息（又是在包装）
      */
     public static <T> CommonPage<T> restPage(List<T> list) {
         CommonPage<T> result = new CommonPage<T>();

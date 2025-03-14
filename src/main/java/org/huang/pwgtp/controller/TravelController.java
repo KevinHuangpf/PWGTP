@@ -155,11 +155,13 @@ public class TravelController {
             @RequestParam(required = false) String fuzzyKey) {
         try {
             log.info("TravelController.list start, pageNum: {}, pageSize: {}, fuzzyKey: {}", pageNum, pageSize, fuzzyKey);
-            CommonPage<TravelDTO> commonPageDTO = travelService.listTravelByPage(pageNum, pageSize, fuzzyKey);
+            CommonPage<TravelDTO> commonPageDTO = travelService.listTravelByPage(pageNum, pageSize, fuzzyKey);//分页对象包含总页数、list
             CommonPage<TravelDetailVO> commonPageVO = new CommonPage<>();
-            BeanUtils.copyProperties(commonPageDTO, commonPageVO);
-            // todo A:看到A的全部及B的已经发布的；B: 看到B的全部及A的已经发布的；
-            commonPageVO.setList(travelConvertor.convertTravelDTOToVOList(commonPageDTO.getList()));
+            BeanUtils.copyProperties(commonPageDTO, commonPageVO);//不同层数据的转换
+            commonPageVO.setList(travelConvertor.convertTravelDTOToVOList(commonPageDTO.getList()));//集合的转换
+
+
+
             return CommonResult.success(commonPageVO);
         } catch (Exception e) {
             log.error("TravelController.list error, pageNum: {}, pageSize: {}, fuzzyKey: {}", pageNum, pageSize, fuzzyKey, e);

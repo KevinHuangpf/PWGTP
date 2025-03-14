@@ -2,6 +2,7 @@ package org.huang.pwgtp.service;
 
 import com.alibaba.fastjson.JSON;
 import com.github.pagehelper.PageHelper;
+import lombok.extern.slf4j.Slf4j;
 import org.huang.pwgtp.common.CommonPage;
 import org.huang.pwgtp.common.bizEnum.TravelStatusEnum;
 import org.huang.pwgtp.convertor.TravelConvertor;
@@ -11,13 +12,18 @@ import org.huang.pwgtp.service.model.TravelDTO;
 import org.huang.pwgtp.service.model.UserDTO;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.ClassPathResource;
+import org.springframework.data.redis.core.StringRedisTemplate;
+import org.springframework.data.redis.core.script.DefaultRedisScript;
 import org.springframework.stereotype.Service;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
 import java.util.Set;
 
 @Service
+@Slf4j
 public class TravelService {
 
     @Autowired
@@ -28,6 +34,17 @@ public class TravelService {
 
     @Autowired
     private TravelConvertor travelConvertor;
+
+    @Autowired
+    private StringRedisTemplate stringRedisTemplate;
+
+    // 解锁脚本
+    private static final DefaultRedisScript<Long> UNLOCK_SCRIPT;
+    static {
+        UNLOCK_SCRIPT = new DefaultRedisScript<>();
+        UNLOCK_SCRIPT.setLocation(new ClassPathResource("unlock.lua"));
+        UNLOCK_SCRIPT.setResultType(Long.class);
+    }
 
 
     public void createTravel(TravelDTO travelDTO) throws Exception{
@@ -58,13 +75,23 @@ public class TravelService {
     }
 
 
-    public CommonPage<TravelDTO> listTravelByPage(Integer pageNum, Integer pageSize, String fuzzyKey){
-        PageHelper.startPage(pageNum, pageSize).setOrderBy("gmt_create desc");
-        List<TravelDO> travelDOList = travelMapper.list(fuzzyKey);
-        CommonPage<TravelDO> commonPageDO = CommonPage.restPage(travelDOList);
+    public CommonPage<TravelDTO> listTravelByPage(Integer pageNum, Integer pageSize, String fuzzyKey) throws Exception {
+        PageHelper.startPage(pageNum, pageSize).setOrderBy("gmt_create desc");// 启用分页
+        List<TravelDO> travelDOList = travelMapper.list(fuzzyKey);//普通查询
+        CommonPage<TravelDO> commonPageDO = CommonPage.restPage(travelDOList);//分页对象，包含总页数、list分页等
         CommonPage<TravelDTO> commonPageDTO = new CommonPage<>();
-        BeanUtils.copyProperties(commonPageDO, commonPageDTO);
-        commonPageDTO.setList(travelConvertor.convertTravelDOToDTOList(commonPageDO.getList()));
+        BeanUtils.copyProperties(commonPageDO, commonPageDTO);// 拷贝分页对象,但是list没拷贝到
+        commonPageDTO.setList(travelConvertor.convertTravelDOToDTOList(commonPageDO.getList()));//list拷贝
+        //  A:看到A的全部及B的已经发布的；B: 看到B的全部及A的已经发布的；
+        //发布了状态就会改变，但是我们是一下全拿到全部数据
+        //遍历list
+       for (TravelDTO travelDTO : commonPageDTO.getList()){
+
+             if (travelDTO.getStatus().equals(TravelStatusEnum.DRAFT.name()) && !userService.getCurrentUser().getId().equals(travelDTO.getCreatorUid())){
+                 commonPageDTO.getList().remove(travelDTO);
+             }
+
+       }
         return commonPageDTO;
     }
 
@@ -93,7 +120,7 @@ public class TravelService {
     }
 
     public void updateTravelStatus(Long travelId, String status) throws Exception{
-        TravelDO travelDO = travelMapper.getById(travelId);
+        TravelDO travelDO = travelMapper.getById(travelId);//先看看数据库有没有数据
         if(Objects.isNull(travelDO)){
             throw new Exception("行程不存在，无法操作");
         }
