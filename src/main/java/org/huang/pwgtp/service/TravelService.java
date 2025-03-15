@@ -10,6 +10,7 @@ import org.huang.pwgtp.repository.TravelMapper;
 import org.huang.pwgtp.repository.model.TravelDO;
 import org.huang.pwgtp.service.model.TravelDTO;
 import org.huang.pwgtp.service.model.UserDTO;
+import org.huang.pwgtp.util.RedissonLockUtil;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.ClassPathResource;
@@ -21,6 +22,9 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
 import java.util.Set;
+import java.util.concurrent.TimeUnit;
+
+import static java.lang.Thread.sleep;
 
 @Service
 @Slf4j
@@ -35,16 +39,16 @@ public class TravelService {
     @Autowired
     private TravelConvertor travelConvertor;
 
-    @Autowired
-    private StringRedisTemplate stringRedisTemplate;
-
-    // 解锁脚本
-    private static final DefaultRedisScript<Long> UNLOCK_SCRIPT;
-    static {
-        UNLOCK_SCRIPT = new DefaultRedisScript<>();
-        UNLOCK_SCRIPT.setLocation(new ClassPathResource("unlock.lua"));
-        UNLOCK_SCRIPT.setResultType(Long.class);
-    }
+//    @Autowired
+//    private StringRedisTemplate stringRedisTemplate;
+//
+//    // 解锁脚本
+//    private static final DefaultRedisScript<Long> UNLOCK_SCRIPT;
+//    static {
+//        UNLOCK_SCRIPT = new DefaultRedisScript<>();
+//        UNLOCK_SCRIPT.setLocation(new ClassPathResource("unlock.lua"));
+//        UNLOCK_SCRIPT.setResultType(Long.class);
+//    }
 
 
     public void createTravel(TravelDTO travelDTO) throws Exception{
@@ -99,8 +103,8 @@ public class TravelService {
 
 
     public void joinTravel(Long travelId, Long userId) throws Exception{
-        // todo 并发问题 redis
-
+        // 为了验证并发，单次调用耗时设置为5s
+        Thread.sleep(5000);
         TravelDTO travelDTO = this.getTravelById(travelId);
         if(Objects.isNull(travelDTO)){
             throw new Exception("行程不存在，无法操作");

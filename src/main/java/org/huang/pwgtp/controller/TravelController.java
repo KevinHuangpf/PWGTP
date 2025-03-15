@@ -15,6 +15,7 @@ import org.huang.pwgtp.service.UserService;
 import org.huang.pwgtp.service.model.TravelDTO;
 import org.huang.pwgtp.controller.vo.TravelDetailVO;
 import org.huang.pwgtp.controller.vo.TravelSaveVO;
+import org.huang.pwgtp.util.RedissonLockUtil;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
@@ -38,6 +39,9 @@ public class TravelController {
 
     @Autowired
     private AIService aiService;
+
+    @Autowired
+    private RedissonLockUtil redissonLockUtil;
 
     @Operation(summary = "新建出行")
     @PostMapping("/create")
@@ -138,8 +142,19 @@ public class TravelController {
     public CommonResult<Void> join(@RequestParam @NotNull Long travelId) {
         try {
             log.info("TravelController.join start, travelId: {}", travelId);
-            travelService.joinTravel(travelId, userService.getCurrentUser().getId());
-            return CommonResult.success(null);
+
+            String lockKey = travelId.toString();
+            if (redissonLockUtil.lock(lockKey)) {
+                try {
+                    travelService.joinTravel(travelId, userService.getCurrentUser().getId());
+                    return CommonResult.success(null);
+                } finally {
+                    redissonLockUtil.unlock(lockKey);
+                }
+            } else {
+                return CommonResult.failed("有成员加入中，稍后操作");
+            }
+
         } catch (Exception e) {
             log.error("TravelController.join error, travelId: {}", travelId, e);
             return CommonResult.failed(e.getMessage());
