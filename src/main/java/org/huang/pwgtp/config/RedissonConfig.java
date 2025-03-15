@@ -17,7 +17,7 @@ public class RedissonConfig {
     public RedissonClient redissonClient(){
         // 配置
         Config config = new Config();
-        config.useSingleServer().setAddress("redis://113.45.38.36:6379")
+        config.useSingleServer().setAddress("redis://192.168.209.132:6379")
                 .setPassword("123456")
                 .setConnectTimeout(30000)  // 默认 10000ms (10秒)，建议增加至 30秒
                 .setTimeout(30000);  ;

@@ -10,6 +10,9 @@ import org.huang.pwgtp.repository.TravelMapper;
 import org.huang.pwgtp.repository.model.TravelDO;
 import org.huang.pwgtp.service.model.TravelDTO;
 import org.huang.pwgtp.service.model.UserDTO;
+import org.redisson.api.RLock;
+import org.redisson.api.RedissonClient;
+import org.springframework.aop.framework.AopContext;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.ClassPathResource;
@@ -35,16 +38,10 @@ public class TravelService {
     @Autowired
     private TravelConvertor travelConvertor;
 
-    @Autowired
-    private StringRedisTemplate stringRedisTemplate;
 
-    // 解锁脚本
-    private static final DefaultRedisScript<Long> UNLOCK_SCRIPT;
-    static {
-        UNLOCK_SCRIPT = new DefaultRedisScript<>();
-        UNLOCK_SCRIPT.setLocation(new ClassPathResource("unlock.lua"));
-        UNLOCK_SCRIPT.setResultType(Long.class);
-    }
+    @Autowired
+    private RedissonClient redissonClient;
+
 
 
     public void createTravel(TravelDTO travelDTO) throws Exception{
@@ -99,25 +96,47 @@ public class TravelService {
 
 
     public void joinTravel(Long travelId, Long userId) throws Exception{
-        // todo 并发问题 redis
+        // 获取分布式锁
+        RLock lock = redissonClient.getLock("travelLock:" + travelId);
+        try {
+            // 尝试加锁，最多等待10秒，锁持有时间30秒
+            boolean isLocked = lock.tryLock(10, 30, java.util.concurrent.TimeUnit.SECONDS);
+            if (!isLocked) {
+                throw new Exception("获取锁失败，请稍后重试");
+            }
 
-        TravelDTO travelDTO = this.getTravelById(travelId);
-        if(Objects.isNull(travelDTO)){
-            throw new Exception("行程不存在，无法操作");
-        }
-        if(travelDTO.getHasRecruitedMemberList().size() >= travelDTO.getPlanRecruitMemberNumber()){
-            throw new Exception("行程已满员，无法操作");
-        }
-        travelDTO.getHasRecruitedMemberList().add(userId);
+            TravelDTO travelDTO = this.getTravelById(travelId);
+            if(Objects.isNull(travelDTO)){
+                throw new Exception("行程不存在，无法操作");
+            }
+            if(travelDTO.getHasRecruitedMemberList().size() >= travelDTO.getPlanRecruitMemberNumber()){
+                throw new Exception("行程已满员，无法操作");
+            }
 
-        TravelDO travelDONew = new TravelDO();
-        travelDONew.setId(travelId);
-        travelDONew.setHasRecruitedMemberList(JSON.toJSONString(travelDTO.getHasRecruitedMemberList()));
-        int updateResult = travelMapper.updateById(travelDONew);
-        if(updateResult != 1){
-            throw new Exception("操作失败");
+            // 检查用户是否已经加入行程
+            if (travelDTO.getHasRecruitedMemberList().contains(userId)) {
+                throw new Exception("用户已经加入该行程，无法重复加入");
+            }
+
+            travelDTO.getHasRecruitedMemberList().add(userId);
+
+            TravelDO travelDONew = new TravelDO();
+            travelDONew.setId(travelId);
+            travelDONew.setHasRecruitedMemberList(JSON.toJSONString(travelDTO.getHasRecruitedMemberList()));
+            int updateResult = travelMapper.updateById(travelDONew);
+            if(updateResult != 1){
+                throw new Exception("操作失败");
+            }
+        } finally {
+            // 释放锁
+            if (lock.isHeldByCurrentThread()) {
+                lock.unlock();
+            }
         }
     }
+
+
+
 
     public void updateTravelStatus(Long travelId, String status) throws Exception{
         TravelDO travelDO = travelMapper.getById(travelId);//先看看数据库有没有数据
